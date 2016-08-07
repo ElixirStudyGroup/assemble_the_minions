@@ -27,6 +27,10 @@ Here are the specifications:
 `mix deps.get` - Get our dependencies
 `mix test.watch` - Run tests on save
 
+Play around with the code `iex -S mix`
+
+(I've defined a couple of minions for you, Stuart and Dave.  They will be started whenever the application is started.  Use `:observer.start` to take a look at the supervision tree and try killing them!!)
+
 ## How?
 
 Fork this project and get cracking.  I've provided the basics of a mix project for you and the very first test.
