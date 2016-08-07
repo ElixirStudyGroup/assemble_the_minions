@@ -2,7 +2,7 @@
 
 [![Assemble the Minitions](https://img.youtube.com/vi/oHpzvFdPLQA/0.jpg)](https://www.youtube.com/watch?v=oHpzvFdPLQA)
 
-## An exercise in Supervision, workers and GenServers
+## An exercise in Supervision, Workers and GenServers
 
 Our mission here is to create a fault tolerant systems of workers to do our evil bidding.
 
@@ -13,6 +13,14 @@ Here are the specifications:
  - Minions are important enough that we will give them names, but no two minions may have the same name
  - If a minion dies, it should be replaced immediately with a minion who'll have the same name
  - If you don't have tests, you didn't do it
+
+## What messages should our Minions respond to?
+
+ - Minions may say hello from themselves
+ - Minions can count
+ - Minions can tell you their current count
+
+ - Minions should be able to handle basic arithmetic operations their count. (+, -, * , /)
 
 ## Getting Started
 
