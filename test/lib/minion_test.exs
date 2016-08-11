@@ -39,5 +39,60 @@ defmodule AssembleTheMinions.MinionTest do
     assert kevin_count == 2
   end
 
+  test "Can add to the count" do
+    AssembleTheMinions.Minion.start_link(:jorge)
+    AssembleTheMinions.Minion.add(:jorge, 2)
+    assert 2 = AssembleTheMinions.Minion.current_count(:jorge)
+  end
 
+  test "Can subtract from the count" do
+    AssembleTheMinions.Minion.start_link(:jorge)
+    AssembleTheMinions.Minion.count(:jorge)
+    AssembleTheMinions.Minion.count(:jorge)
+    AssembleTheMinions.Minion.count(:jorge)
+    AssembleTheMinions.Minion.subtract(:jorge, 1)
+    assert 2 = AssembleTheMinions.Minion.current_count(:jorge)
+  end
+
+  test "Can multiply the count" do
+    AssembleTheMinions.Minion.start_link(:jorge)
+    AssembleTheMinions.Minion.count(:jorge)
+    AssembleTheMinions.Minion.count(:jorge)
+    AssembleTheMinions.Minion.multiply(:jorge, 3)
+    assert 6 = AssembleTheMinions.Minion.current_count(:jorge)
+  end
+
+  test "Can divide the count" do
+    AssembleTheMinions.Minion.start_link(:jorge)
+    AssembleTheMinions.Minion.count(:jorge)
+    AssembleTheMinions.Minion.count(:jorge)
+    AssembleTheMinions.Minion.divide(:jorge, 2)
+    assert 1 = AssembleTheMinions.Minion.current_count(:jorge)
+  end
+
+  test "Can't create negative count" do
+    AssembleTheMinions.Minion.start_link(:jorge)
+    AssembleTheMinions.Minion.count(:jorge)
+    AssembleTheMinions.Minion.subtract(:jorge, 2)
+    assert 0 = AssembleTheMinions.Minion.current_count(:jorge)
+  end
+
+  test "Can't create fractional count" do
+    AssembleTheMinions.Minion.start_link(:jorge)
+    AssembleTheMinions.Minion.count(:jorge)
+    AssembleTheMinions.Minion.count(:jorge)
+    AssembleTheMinions.Minion.count(:jorge)
+    AssembleTheMinions.Minion.divide(:jorge, 2)
+    assert 1 = AssembleTheMinions.Minion.current_count(:jorge)
+  end
+
+  test "Can't use negative input" do
+    AssembleTheMinions.Minion.start_link(:jorge)
+    catch_error AssembleTheMinions.Minion.add(:jorge, -1)
+  end
+
+  test "Can't use fractional input" do
+    AssembleTheMinions.Minion.start_link(:jorge)
+    catch_error AssembleTheMinions.Minion.add(:jorge, 0.5)
+  end
 end
