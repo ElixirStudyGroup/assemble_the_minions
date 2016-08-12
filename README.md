@@ -17,8 +17,8 @@ Here are the specifications:
 ## What messages should our Minions respond to?
 
  - Minions may say hello from themselves
- - Minions can count
- - Minions can tell you their current count
+ - Minions can do arithmetic
+ - Minions can tell you the value of the number they are holding in memory, let's call it a count
 
  - Minions should be able to handle basic arithmetic operations their count. (+, -, * , /)
 
