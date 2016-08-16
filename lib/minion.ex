@@ -70,6 +70,20 @@ defmodule AssembleTheMinions.Minion do
   end
 
   @doc """
+  Given the minion's name, sends a :multiply message with a number to the process
+
+  iex> AssembleTheMinions.Minion.start_link(:cj)
+  iex> AssembleTheMinions.Minion.count(:cj)
+  iex> AssembleTheMinions.Minion.count(:cj)
+  iex> AssembleTheMinions.Minion.multiply(:cj, 3)
+  iex> AssembleTheMinions.Minion.current_count(:cj)
+  6
+  """
+  def multiply(minion_name, number) do
+   GenServer.cast(minion_name, { :multiply, number })
+  end
+
+  @doc """
   Responsible for handling :hello messages.
 
   Call signatures take 3 parameters, the incoming message (which is of course pattern matched and of arbitrary complexity).
@@ -125,6 +139,15 @@ defmodule AssembleTheMinions.Minion do
   """
   def handle_cast({:subtract, number}, state) do
     new_state = Map.update(state, :count, 1, &(&1 - number))
+    {:noreply, new_state}
+  end
+
+  @doc """
+  # TODO
+  # iex> TODO
+  """
+  def handle_cast({:multiply, number}, state) do
+    new_state = Map.update(state, :count, 1, &(&1 * number))
     {:noreply, new_state}
   end
 end

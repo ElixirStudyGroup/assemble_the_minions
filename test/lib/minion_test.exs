@@ -58,4 +58,17 @@ defmodule AssembleTheMinions.MinionTest do
 
     assert sub_count == -5
   end
+
+  test "Minions can perform multiplication" do
+    AssembleTheMinions.Minion.start_link(:tim)
+
+    AssembleTheMinions.Minion.count(:tim)
+    AssembleTheMinions.Minion.count(:tim)
+
+    AssembleTheMinions.Minion.multiply(:tim, 3)
+
+    tim_count = AssembleTheMinions.Minion.current_count(:tim)
+
+    assert tim_count == 6
+  end
 end
