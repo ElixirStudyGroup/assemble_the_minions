@@ -39,5 +39,13 @@ defmodule AssembleTheMinions.MinionTest do
     assert kevin_count == 2
   end
 
+  test "Minions can perform addition" do
+    AssembleTheMinions.Minion.start_link(:addam)
 
+    AssembleTheMinions.Minion.add(:addam, 5)
+
+    addam_count = AssembleTheMinions.Minion.current_count(:addam)
+
+    assert addam_count == 5
+  end
 end

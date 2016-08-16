@@ -44,6 +44,19 @@ defmodule AssembleTheMinions.Minion do
   end
 
   @doc """
+  Given the minion's name, sends a :add message with a number to the process
+
+  iex> AssembleTheMinions.Minion.start_link(:cj)
+  iex> AssembleTheMinions.Minion.count(:cj)
+  iex> AssembleTheMinions.Minion.add(:cj, 3)
+  iex> AssembleTheMinions.Minion.current_count(:cj)
+  4
+  """
+  def add(minion_name, number) do
+    GenServer.cast(minion_name, { :add, number })
+  end
+
+  @doc """
   Responsible for handling :hello messages.
 
   Call signatures take 3 parameters, the incoming message (which is of course pattern matched and of arbitrary complexity).
@@ -84,4 +97,12 @@ defmodule AssembleTheMinions.Minion do
     {:noreply, new_state}
   end
 
+  @doc """
+  # TODO
+  # iex> TODO
+  """
+  def handle_cast({:add, number}, state) do
+    new_state = Map.update(state, :count, 1, &(&1 + number))
+    {:noreply, new_state}
+  end
 end
