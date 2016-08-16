@@ -71,4 +71,20 @@ defmodule AssembleTheMinions.MinionTest do
 
     assert tim_count == 6
   end
+
+  test "Minions can perform division" do
+    AssembleTheMinions.Minion.start_link(:div)
+
+    # Is there an equivalent to Ruby's 4.times { }?
+    AssembleTheMinions.Minion.count(:div)
+    AssembleTheMinions.Minion.count(:div)
+    AssembleTheMinions.Minion.count(:div)
+    AssembleTheMinions.Minion.count(:div)
+
+    AssembleTheMinions.Minion.divide(:div, 2)
+
+    div_count = AssembleTheMinions.Minion.current_count(:div)
+
+    assert div_count == 2
+  end
 end
