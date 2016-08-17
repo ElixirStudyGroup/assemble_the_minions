@@ -87,4 +87,16 @@ defmodule AssembleTheMinions.MinionTest do
 
     assert div_count == 2
   end
+
+  test "Dividing by 0 confuses Minions" do
+    AssembleTheMinions.Minion.start_link(:dave)
+
+    AssembleTheMinions.Minion.count(:dave)
+
+    AssembleTheMinions.Minion.divide(:dave, 0)
+
+    dave_count = AssembleTheMinions.Minion.current_count(:dave)
+
+    assert dave_count == "banana"
+  end
 end

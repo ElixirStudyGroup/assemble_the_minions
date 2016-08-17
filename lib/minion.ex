@@ -169,6 +169,15 @@ defmodule AssembleTheMinions.Minion do
   # TODO
   # iex> TODO
   """
+  def handle_cast({:divide, 0}, state) do
+    new_state = Map.put(state, :count, "banana")
+    {:noreply, new_state}
+  end
+
+  @doc """
+  # TODO
+  # iex> TODO
+  """
   def handle_cast({:divide, number}, state) do
     new_state = Map.update(state, :count, 1, &(div(&1, number)))
     {:noreply, new_state}
