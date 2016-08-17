@@ -29,7 +29,7 @@ defmodule AssembleTheMinions.Minion do
   Given the minion's name, sends a :count message to the process
   """
   def count(minion_name) do
-    GenServer.cast(minion_name, :count)
+    GenServer.cast(minion_name, {:operate, &(&1 + 1)})
   end
 
   @doc """
@@ -44,7 +44,7 @@ defmodule AssembleTheMinions.Minion do
   end
 
   @doc """
-  Given the minion's name, sends a :add message with a number to the process
+  Given the minion's name, tells the process to add 1 to current count
 
   iex> AssembleTheMinions.Minion.start_link(:cj)
   iex> AssembleTheMinions.Minion.count(:cj)
@@ -53,11 +53,12 @@ defmodule AssembleTheMinions.Minion do
   4
   """
   def add(minion_name, number) do
-    GenServer.cast(minion_name, { :add, number })
+    GenServer.cast(minion_name, { :operate, &(&1 + &2), number })
   end
 
   @doc """
-  Given the minion's name, sends a :subtract message with a number to the process
+  Given the minion's name and a number, tells the process to add the number to
+  the current count
 
   iex> AssembleTheMinions.Minion.start_link(:cj)
   iex> AssembleTheMinions.Minion.count(:cj)
@@ -66,11 +67,12 @@ defmodule AssembleTheMinions.Minion do
   -2
   """
   def subtract(minion_name, number) do
-    GenServer.cast(minion_name, { :subtract, number })
+    GenServer.cast(minion_name, { :operate, &(&1 - &2), number})
   end
 
   @doc """
-  Given the minion's name, sends a :multiply message with a number to the process
+  Given the minion's name and a number, tells the process to multiply the
+  current count by the number
 
   iex> AssembleTheMinions.Minion.start_link(:cj)
   iex> AssembleTheMinions.Minion.count(:cj)
@@ -80,11 +82,12 @@ defmodule AssembleTheMinions.Minion do
   6
   """
   def multiply(minion_name, number) do
-   GenServer.cast(minion_name, { :multiply, number })
+   GenServer.cast(minion_name, { :operate, &(&1 * &2), number })
   end
 
   @doc """
-  Given the minion's name, sends a :divide message with a number to the process
+  Given the minion's name and a number, tells the process to divide the
+  current count by the number
 
   iex> AssembleTheMinions.Minion.start_link(:cj)
   iex> AssembleTheMinions.Minion.count(:cj)
@@ -94,7 +97,7 @@ defmodule AssembleTheMinions.Minion do
   1
   """
   def divide(minion_name, number) do
-   GenServer.cast(minion_name, { :divide, number })
+   GenServer.cast(minion_name, { :operate, &(div(&1, &2)), number })
   end
 
   @doc """
@@ -124,62 +127,12 @@ defmodule AssembleTheMinions.Minion do
     {:reply, state.count, state}
   end
 
-  @doc """
-  handle_cast receives a message and the current state.
-
-  Cast's do not return a response, they are fire and forget.
-
-  We return a two element tuple.
-
-  Not that we take the existing state as the input, perform some change operations and return that as the new state.
-  """
-  def handle_cast(:count, state) do
-    new_state = Map.update(state, :count, 1, &(&1 + 1))
+  def handle_cast({:operate, func}, state) do
+    new_state = Map.update(state, :count, 1, func)
     {:noreply, new_state}
   end
-
-  @doc """
-  # TODO
-  # iex> TODO
-  """
-  def handle_cast({:add, number}, state) do
-    new_state = Map.update(state, :count, 1, &(&1 + number))
-    {:noreply, new_state}
-  end
-
-  @doc """
-  # TODO
-  # iex> TODO
-  """
-  def handle_cast({:subtract, number}, state) do
-    new_state = Map.update(state, :count, 1, &(&1 - number))
-    {:noreply, new_state}
-  end
-
-  @doc """
-  # TODO
-  # iex> TODO
-  """
-  def handle_cast({:multiply, number}, state) do
-    new_state = Map.update(state, :count, 1, &(&1 * number))
-    {:noreply, new_state}
-  end
-
-  @doc """
-  # TODO
-  # iex> TODO
-  """
-  def handle_cast({:divide, 0}, state) do
-    new_state = Map.put(state, :count, "banana")
-    {:noreply, new_state}
-  end
-
-  @doc """
-  # TODO
-  # iex> TODO
-  """
-  def handle_cast({:divide, number}, state) do
-    new_state = Map.update(state, :count, 1, &(div(&1, number)))
+  def handle_cast({:operate, func, value}, state) do
+    new_state = Map.put(state, :count, func.(state.count, value))
     {:noreply, new_state}
   end
 end
