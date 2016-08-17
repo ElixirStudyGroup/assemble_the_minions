@@ -87,4 +87,14 @@ defmodule AssembleTheMinions.MinionTest do
 
     assert div_count == 2
   end
+
+  test "Minions make bananas" do
+    AssembleTheMinions.Minion.start_link(:div)
+
+    AssembleTheMinions.Minion.divide(:div, 0)
+
+    div_count = AssembleTheMinions.Minion.current_count(:div)
+
+    assert div_count == "🍌"
+  end
 end

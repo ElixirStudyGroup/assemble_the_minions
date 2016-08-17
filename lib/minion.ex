@@ -85,6 +85,10 @@ defmodule AssembleTheMinions.Minion do
    GenServer.cast(minion_name, { :operate, &(&1 * &2), number })
   end
 
+  def divide(minion_name, 0) do
+    GenServer.cast(minion_name, :banana)
+  end
+
   @doc """
   Given the minion's name and a number, tells the process to divide the
   current count by the number
@@ -125,6 +129,10 @@ defmodule AssembleTheMinions.Minion do
   """
   def handle_call(:current_count, _from, state) do
     {:reply, state.count, state}
+  end
+
+  def handle_cast(:banana, _state) do
+    {:noreply, %{count: "🍌"}}
   end
 
   def handle_cast({:operate, func}, state) do
