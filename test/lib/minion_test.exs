@@ -39,5 +39,52 @@ defmodule AssembleTheMinions.MinionTest do
     assert kevin_count == 2
   end
 
+  test "Minions can perform addition" do
+    AssembleTheMinions.Minion.start_link(:addam)
 
+    AssembleTheMinions.Minion.add(:addam, 5)
+
+    addam_count = AssembleTheMinions.Minion.current_count(:addam)
+
+    assert addam_count == 5
+  end
+
+  test "Minions can perform subtraction" do
+    AssembleTheMinions.Minion.start_link(:subtractam)
+
+    AssembleTheMinions.Minion.subtract(:subtractam, 5)
+
+    sub_count = AssembleTheMinions.Minion.current_count(:subtractam)
+
+    assert sub_count == -5
+  end
+
+  test "Minions can perform multiplication" do
+    AssembleTheMinions.Minion.start_link(:tim)
+
+    AssembleTheMinions.Minion.count(:tim)
+    AssembleTheMinions.Minion.count(:tim)
+
+    AssembleTheMinions.Minion.multiply(:tim, 3)
+
+    tim_count = AssembleTheMinions.Minion.current_count(:tim)
+
+    assert tim_count == 6
+  end
+
+  test "Minions can perform division" do
+    AssembleTheMinions.Minion.start_link(:div)
+
+    # Is there an equivalent to Ruby's 4.times { }?
+    AssembleTheMinions.Minion.count(:div)
+    AssembleTheMinions.Minion.count(:div)
+    AssembleTheMinions.Minion.count(:div)
+    AssembleTheMinions.Minion.count(:div)
+
+    AssembleTheMinions.Minion.divide(:div, 2)
+
+    div_count = AssembleTheMinions.Minion.current_count(:div)
+
+    assert div_count == 2
+  end
 end

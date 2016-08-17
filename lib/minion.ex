@@ -29,7 +29,7 @@ defmodule AssembleTheMinions.Minion do
   Given the minion's name, sends a :count message to the process
   """
   def count(minion_name) do
-    GenServer.cast(minion_name, :count)
+    GenServer.cast(minion_name, {:operate, &(&1 + 1)})
   end
 
   @doc """
@@ -41,6 +41,63 @@ defmodule AssembleTheMinions.Minion do
   """
   def current_count(minion_name) do
     GenServer.call(minion_name, :current_count)
+  end
+
+  @doc """
+  Given the minion's name, tells the process to add 1 to current count
+
+  iex> AssembleTheMinions.Minion.start_link(:cj)
+  iex> AssembleTheMinions.Minion.count(:cj)
+  iex> AssembleTheMinions.Minion.add(:cj, 3)
+  iex> AssembleTheMinions.Minion.current_count(:cj)
+  4
+  """
+  def add(minion_name, number) do
+    GenServer.cast(minion_name, { :operate, &(&1 + &2), number })
+  end
+
+  @doc """
+  Given the minion's name and a number, tells the process to add the number to
+  the current count
+
+  iex> AssembleTheMinions.Minion.start_link(:cj)
+  iex> AssembleTheMinions.Minion.count(:cj)
+  iex> AssembleTheMinions.Minion.subtract(:cj, 3)
+  iex> AssembleTheMinions.Minion.current_count(:cj)
+  -2
+  """
+  def subtract(minion_name, number) do
+    GenServer.cast(minion_name, { :operate, &(&1 - &2), number})
+  end
+
+  @doc """
+  Given the minion's name and a number, tells the process to multiply the
+  current count by the number
+
+  iex> AssembleTheMinions.Minion.start_link(:cj)
+  iex> AssembleTheMinions.Minion.count(:cj)
+  iex> AssembleTheMinions.Minion.count(:cj)
+  iex> AssembleTheMinions.Minion.multiply(:cj, 3)
+  iex> AssembleTheMinions.Minion.current_count(:cj)
+  6
+  """
+  def multiply(minion_name, number) do
+   GenServer.cast(minion_name, { :operate, &(&1 * &2), number })
+  end
+
+  @doc """
+  Given the minion's name and a number, tells the process to divide the
+  current count by the number
+
+  iex> AssembleTheMinions.Minion.start_link(:cj)
+  iex> AssembleTheMinions.Minion.count(:cj)
+  iex> AssembleTheMinions.Minion.count(:cj)
+  iex> AssembleTheMinions.Minion.divide(:cj, 2)
+  iex> AssembleTheMinions.Minion.current_count(:cj)
+  1
+  """
+  def divide(minion_name, number) do
+   GenServer.cast(minion_name, { :operate, &(div(&1, &2)), number })
   end
 
   @doc """
@@ -70,18 +127,12 @@ defmodule AssembleTheMinions.Minion do
     {:reply, state.count, state}
   end
 
-  @doc """
-  handle_cast receives a message and the current state.
-
-  Cast's do not return a response, they are fire and forget.
-
-  We return a two element tuple.
-
-  Not that we take the existing state as the input, perform some change operations and return that as the new state.
-  """
-  def handle_cast(:count, state) do
-    new_state = Map.update(state, :count, 1, &(&1 + 1))
+  def handle_cast({:operate, func}, state) do
+    new_state = Map.update(state, :count, 1, func)
     {:noreply, new_state}
   end
-
+  def handle_cast({:operate, func, value}, state) do
+    new_state = Map.put(state, :count, func.(state.count, value))
+    {:noreply, new_state}
+  end
 end
