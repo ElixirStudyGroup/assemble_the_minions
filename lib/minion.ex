@@ -32,6 +32,59 @@ defmodule AssembleTheMinions.Minion do
     GenServer.cast(minion_name, :count)
   end
 
+
+  @doc """
+    Given the minion's name, tell the provess to add the number to its count
+
+    iex> AssembleTheMinions.Minion.current_count(:isaac)
+    0
+    iex> AssembleTheMinions.Minion.add(:isaac, 4)
+    iex> AssembleTheMinions.Minion.current_count(:isaac)
+    4
+  """
+  def add(minion_name, number) do
+    GenServer.cast(minion_name, {:add, number})
+  end
+
+  @doc """
+    Given the minion's name, tell the provess to subtract the number to its count
+
+    iex> AssembleTheMinions.Minion.current_count(:isaac)
+    10
+    iex> AssembleTheMinions.Minion.subtract(:isaac, 4)
+    iex> AssembleTheMinions.Minion.current_count(:isaac)
+    6
+  """
+  def subtract(minion_name, number) do
+    GenServer.cast(minion_name, {:subtract, number})
+  end
+
+  @doc """
+    Given the minion's name, tell the provess to multiply the count by the passed in number
+
+    iex> AssembleTheMinions.Minion.current_count(:isaac)
+    10
+    iex> AssembleTheMinions.Minion.multipy(:isaac, 4)
+    iex> AssembleTheMinions.Minion.current_count(:isaac)
+    40
+  """
+  def multiply(minion_name, number) do
+    GenServer.cast(minion_name, {:multiply, number})
+  end
+
+  @doc """
+    Given the minion's name, tell the provess to divide the count by the passed in number
+
+    iex> AssembleTheMinions.Minion.current_count(:isaac)
+    27
+    iex> AssembleTheMinions.Minion.divide(:isaac, 3)
+    iex> AssembleTheMinions.Minion.current_count(:isaac)
+    9
+  """
+  def divide(minion_name, number) do
+    GenServer.cast(minion_name, {:divide, number})
+  end
+
   @doc """
   Given the minion's name sends a :current_count message to the process
 
@@ -84,4 +137,23 @@ defmodule AssembleTheMinions.Minion do
     {:noreply, new_state}
   end
 
+  def handle_cast({:add, delta}, state) do
+    new_state = Map.update(state, :count, 1, &(&1 + delta))
+    { :noreply,  new_state }
+  end
+
+  def handle_cast({:subtract, delta}, state) do
+    new_state = Map.update(state, :count, 1, &(&1 - delta))
+    { :noreply,  new_state }
+  end
+
+  def handle_cast({:multiply, delta}, state) do
+    new_state = Map.update(state, :count, 1, &(&1 * delta))
+    { :noreply, new_state }
+  end
+
+  def handle_cast({:divide, delta}, state) do
+    new_state = Map.update(state, :count, 1, &(&1 / delta))
+    { :noreply, new_state }
+  end
 end
