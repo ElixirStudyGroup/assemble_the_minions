@@ -32,6 +32,22 @@ defmodule AssembleTheMinions.Minion do
     GenServer.cast(minion_name, :count)
   end
 
+  def add(minion_name, number) do
+    GenServer.cast(minion_name, {:add, number})
+  end
+
+  def subtract(minion_name, number) do
+    GenServer.cast(minion_name, {:subtract, number})
+  end
+
+  def multiply(minion_name, number) do
+    GenServer.cast(minion_name, {:multiply, number})
+  end
+
+  def divide(minion_name, number) do
+    GenServer.cast(minion_name, {:divide, number})
+  end
+
   @doc """
   Given the minion's name sends a :current_count message to the process
 
@@ -84,4 +100,23 @@ defmodule AssembleTheMinions.Minion do
     {:noreply, new_state}
   end
 
+  def handle_cast({:add, delta}, state) do
+    new_state = Map.update(state, :count, 1, &(&1 + delta))
+    { :noreply,  new_state }
+  end
+
+  def handle_cast({:subtract, delta}, state) do
+    new_state = Map.update(state, :count, 1, &(&1 - delta))
+    { :noreply,  new_state }
+  end
+
+  def handle_cast({:multiply, delta}, state) do
+    new_state = Map.update(state, :count, 1, &(&1 * delta))
+    { :noreply, new_state }
+  end
+
+  def handle_cast({:divide, delta}, state) do
+    new_state = Map.update(state, :count, 1, &(&1 / delta))
+    { :noreply, new_state }
+  end
 end
