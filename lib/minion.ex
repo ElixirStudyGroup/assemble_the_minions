@@ -43,6 +43,22 @@ defmodule AssembleTheMinions.Minion do
     GenServer.call(minion_name, :current_count)
   end
 
+  def add(minion_name, n) when is_number(n) do 
+    GenServer.cast(minion_name, {:add, n})
+  end
+
+  def subtract(minion_name, n) when is_number(n) do 
+    GenServer.cast(minion_name, {:subtract, n})
+  end
+
+  def multiply(minion_name, n) when is_number(n) do 
+    GenServer.cast(minion_name, {:multiply, n})
+  end
+
+  def divide(minion_name, n) when is_number(n) do 
+    GenServer.cast(minion_name, {:divide, n})
+  end
+
   @doc """
   Responsible for handling :hello messages.
 
@@ -84,4 +100,23 @@ defmodule AssembleTheMinions.Minion do
     {:noreply, new_state}
   end
 
+  def handle_cast({:add, n}, state) do
+    new_state = Map.update(state, :count, 0, &(&1 + n))
+    {:noreply, new_state}
+  end
+
+  def handle_cast({:subtract, n}, state) do
+    new_state = Map.update(state, :count, 0, &(&1 - n))
+    {:noreply, new_state}
+  end
+
+  def handle_cast({:multiply, n}, state) do
+    new_state = Map.update(state, :count, 0, &(&1 * n))
+    {:noreply, new_state}
+  end
+
+  def handle_cast({:divide, n}, state) do
+    new_state = Map.update(state, :count, 0, &(&1 / n))
+    {:noreply, new_state}
+  end
 end
