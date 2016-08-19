@@ -39,5 +39,46 @@ defmodule AssembleTheMinions.MinionTest do
     assert kevin_count == 2
   end
 
+  test "minions can add to their count" do
+    AssembleTheMinions.Minion.start_link(:kevin)
 
+    AssembleTheMinions.Minion.add(:kevin, 1)
+    assert AssembleTheMinions.Minion.current_count(:kevin) == 1
+
+    AssembleTheMinions.Minion.add(:kevin, -2)
+    assert AssembleTheMinions.Minion.current_count(:kevin) == -1
+  end
+
+  test "minions can subtract from their count" do
+    AssembleTheMinions.Minion.start_link(:kevin)
+
+    AssembleTheMinions.Minion.subtract(:kevin, 10)
+    assert AssembleTheMinions.Minion.current_count(:kevin) == -10
+  end
+
+  test "minions can multiply their count" do
+    AssembleTheMinions.Minion.start_link(:kevin)
+
+    AssembleTheMinions.Minion.count(:kevin)
+    assert AssembleTheMinions.Minion.current_count(:kevin) == 1
+
+    AssembleTheMinions.Minion.multiply(:kevin, 10)
+    assert AssembleTheMinions.Minion.current_count(:kevin) == 10
+
+    AssembleTheMinions.Minion.multiply(:kevin, -2)
+    assert AssembleTheMinions.Minion.current_count(:kevin) == -20
+  end
+
+  test "minions can divide their count" do
+    AssembleTheMinions.Minion.start_link(:kevin)
+
+    AssembleTheMinions.Minion.add(:kevin, 10)
+    assert AssembleTheMinions.Minion.current_count(:kevin) == 10
+
+    AssembleTheMinions.Minion.divide(:kevin, 2)
+    assert AssembleTheMinions.Minion.current_count(:kevin) == 5
+
+    AssembleTheMinions.Minion.divide(:kevin, 0.5)
+    assert AssembleTheMinions.Minion.current_count(:kevin) == 10
+  end
 end
